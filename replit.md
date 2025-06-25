@@ -120,7 +120,13 @@ Required environment variables:
 - Session storage currently in-memory (should migrate to Redis for production)
 
 ## Changelog
-- June 25, 2025. Initial setup
+- June 25, 2025: Initial setup with in-memory storage
+- June 25, 2025: **Major Architecture Update** - Migrated from in-memory storage to PostgreSQL database
+  - Added `server/db.ts` with Neon database connection
+  - Created `DatabaseStorage` class implementing all storage operations with Drizzle ORM
+  - Added database relations between users and expenses
+  - Successfully migrated schema with `npm run db:push`
+  - Database automatically initializes with default users and sample expense data
 
 ## User Preferences
 

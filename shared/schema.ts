@@ -1,4 +1,5 @@
 import { pgTable, text, serial, integer, boolean, timestamp, decimal } from "drizzle-orm/pg-core";
+import { relations } from "drizzle-orm";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -98,3 +99,19 @@ export type ExpenseStats = {
   rejectedCount: number;
   totalAmount: string;
 };
+
+// Relations
+export const usersRelations = relations(users, ({ many }) => ({
+  expenses: many(expenses),
+}));
+
+export const expensesRelations = relations(expenses, ({ one }) => ({
+  employee: one(users, {
+    fields: [expenses.employeeId],
+    references: [users.id],
+  }),
+  approver: one(users, {
+    fields: [expenses.approvedBy],
+    references: [users.id],
+  }),
+}));
