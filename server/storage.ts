@@ -124,8 +124,12 @@ export class MemStorage implements IStorage {
   async createUser(insertUser: InsertUser): Promise<User> {
     const id = this.currentUserId++;
     const user: User = {
-      ...insertUser,
       id,
+      email: insertUser.email,
+      name: insertUser.name,
+      department: insertUser.department || null,
+      role: insertUser.role || "employee",
+      isActive: insertUser.isActive ?? true,
       createdAt: new Date(),
     };
     this.users.set(id, user);
@@ -166,14 +170,26 @@ export class MemStorage implements IStorage {
   async createExpense(insertExpense: InsertExpense): Promise<Expense> {
     const id = this.currentExpenseId++;
     const expense: Expense = {
-      ...insertExpense,
       id,
+      employeeId: insertExpense.employeeId,
+      employeeName: insertExpense.employeeName,
+      employeeEmail: insertExpense.employeeEmail,
+      department: insertExpense.department || null,
+      amount: insertExpense.amount.toString(),
+      description: insertExpense.description,
+      category: insertExpense.category,
+      expenseDate: insertExpense.expenseDate,
       submissionDate: new Date(),
       status: "pending",
       approvedBy: null,
       approvedByName: null,
       approvalDate: null,
       approvalNote: null,
+      receiptUrl: insertExpense.receiptUrl || null,
+      receiptFileName: insertExpense.receiptFileName || null,
+      emailId: insertExpense.emailId || null,
+      formSubmissionId: insertExpense.formSubmissionId || null,
+      sheetsRowNumber: insertExpense.sheetsRowNumber || null,
       notificationSent: false,
     };
     this.expenses.set(id, expense);

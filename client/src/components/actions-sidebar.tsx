@@ -1,6 +1,8 @@
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Upload, Mail, FileText, Circle } from "lucide-react";
+import { ExpenseFormModal } from "./expense-form-modal";
 
 export function ActionsSidebar() {
   const recentActivity = [

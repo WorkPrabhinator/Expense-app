@@ -57,8 +57,9 @@ export const insertExpenseSchema = createInsertSchema(expenses).omit({
   approvalDate: true,
   notificationSent: true,
 }).extend({
-  amount: z.string().transform((val) => parseFloat(val)),
+  amount: z.string(),
   expenseDate: z.string().transform((val) => new Date(val)),
+  department: z.string().nullable().optional(),
 });
 
 export const updateExpenseStatusSchema = z.object({
