@@ -131,3 +131,12 @@ Required environment variables:
 ## User Preferences
 
 Preferred communication style: Simple, everyday language.
+
+## Recent Changes
+
+June 25, 2025 - **Database Migration Completed Successfully**
+- PostgreSQL database fully operational with ExpenseFlow
+- All CRUD operations working through Drizzle ORM
+- User confirmed database integration is working great
+- Sample data automatically populated on first run
+- Expense submission, approval, and stats all persisting correctly
