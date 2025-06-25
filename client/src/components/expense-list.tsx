@@ -39,12 +39,18 @@ export function ExpenseList() {
 
   const updateStatusMutation = useMutation({
     mutationFn: async ({ id, status, note }: { id: number; status: string; note?: string }) => {
+      const authHeaders = getAuthHeader();
+      const headers: Record<string, string> = {
+        "Content-Type": "application/json",
+      };
+      
+      if (authHeaders.Authorization) {
+        headers.Authorization = authHeaders.Authorization;
+      }
+      
       const response = await fetch(`/api/expenses/${id}/status`, {
         method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          ...getAuthHeader(),
-        },
+        headers,
         body: JSON.stringify({ status, approvalNote: note }),
       });
       if (!response.ok) throw new Error("Failed to update expense");
