@@ -7,6 +7,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Check, X, Paperclip, Plus } from "lucide-react";
 import { ExpenseDetailModal } from "./expense-detail-modal";
+import { ExpenseFormModal } from "./expense-form-modal";
 import { getAuthHeader } from "@/lib/auth";
 import { useToast } from "@/hooks/use-toast";
 import type { ExpenseWithFormattedAmount } from "@shared/schema";
@@ -14,14 +15,22 @@ import type { ExpenseWithFormattedAmount } from "@shared/schema";
 export function ExpenseList() {
   const [selectedExpense, setSelectedExpense] = useState<ExpenseWithFormattedAmount | null>(null);
   const [statusFilter, setStatusFilter] = useState("pending");
+  const [isExpenseFormOpen, setIsExpenseFormOpen] = useState(false);
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
   const { data: expenses = [], isLoading } = useQuery<ExpenseWithFormattedAmount[]>({
     queryKey: ["/api/expenses", { status: statusFilter }],
     queryFn: async () => {
+      const authHeaders = getAuthHeader();
+      const headers: Record<string, string> = {};
+      
+      if (authHeaders.Authorization) {
+        headers.Authorization = authHeaders.Authorization;
+      }
+      
       const response = await fetch(`/api/expenses?status=${statusFilter}`, {
-        headers: getAuthHeader(),
+        headers,
       });
       if (!response.ok) throw new Error("Failed to fetch expenses");
       return response.json();
@@ -141,7 +150,10 @@ export function ExpenseList() {
                   <SelectItem value="rejected">Rejected</SelectItem>
                 </SelectContent>
               </Select>
-              <Button className="bg-primary hover:bg-primary/90">
+              <Button 
+                className="bg-primary hover:bg-primary/90"
+                onClick={() => setIsExpenseFormOpen(true)}
+              >
                 <Plus className="h-4 w-4 mr-1" />
                 New Expense
               </Button>
@@ -244,6 +256,11 @@ export function ExpenseList() {
         onApprove={handleApprove}
         onReject={handleReject}
         isLoading={updateStatusMutation.isPending}
+      />
+
+      <ExpenseFormModal
+        isOpen={isExpenseFormOpen}
+        onClose={() => setIsExpenseFormOpen(false)}
       />
     </>
   );

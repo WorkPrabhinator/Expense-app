@@ -5,6 +5,8 @@ import { Upload, Mail, FileText, Circle } from "lucide-react";
 import { ExpenseFormModal } from "./expense-form-modal";
 
 export function ActionsSidebar() {
+  const [isExpenseFormOpen, setIsExpenseFormOpen] = useState(false);
+  
   const recentActivity = [
     {
       id: 1,
@@ -47,7 +49,10 @@ export function ActionsSidebar() {
           <CardTitle className="text-lg font-semibold">Submit Expense</CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
-          <Button className="w-full bg-primary hover:bg-primary/90">
+          <Button 
+            className="w-full bg-primary hover:bg-primary/90"
+            onClick={() => setIsExpenseFormOpen(true)}
+          >
             <Upload className="h-4 w-4 mr-2" />
             Upload Receipt
           </Button>
@@ -109,6 +114,11 @@ export function ActionsSidebar() {
           </div>
         </CardContent>
       </Card>
+
+      <ExpenseFormModal 
+        isOpen={isExpenseFormOpen}
+        onClose={() => setIsExpenseFormOpen(false)}
+      />
     </div>
   );
 }

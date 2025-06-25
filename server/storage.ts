@@ -111,6 +111,40 @@ export class MemStorage implements IStorage {
       key: "notifications_enabled",
       value: "true",
     });
+
+    // Add sample expenses for testing
+    await this.createExpense({
+      employeeId: 3,
+      employeeName: "Sarah Miller",
+      employeeEmail: "sarah@agency.com",
+      department: "Marketing",
+      amount: "156.50",
+      description: "Team lunch at The Bistro",
+      category: "Meals & Entertainment",
+      expenseDate: new Date("2025-06-23"),
+    });
+
+    await this.createExpense({
+      employeeId: 4,
+      employeeName: "Michael Johnson",
+      employeeEmail: "michael@agency.com",
+      department: "Engineering",
+      amount: "89.99",
+      description: "Uber to client meeting",
+      category: "Transportation",
+      expenseDate: new Date("2025-06-22"),
+    });
+
+    await this.createExpense({
+      employeeId: 3,
+      employeeName: "Sarah Miller",
+      employeeEmail: "sarah@agency.com",
+      department: "Marketing",
+      amount: "299.00",
+      description: "Software license for design tools",
+      category: "Software",
+      expenseDate: new Date("2025-06-21"),
+    });
   }
 
   async getUser(id: number): Promise<User | undefined> {
