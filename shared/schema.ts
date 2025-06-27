@@ -31,6 +31,13 @@ export const expenses = pgTable("expenses", {
   approvalNote: text("approval_note"),
   receiptUrl: text("receipt_url"),
   receiptFileName: text("receipt_file_name"),
+  receiptFileData: text("receipt_file_data"), // Base64 encoded file data for PDFs
+  receiptFileType: text("receipt_file_type"), // MIME type (application/pdf, image/jpeg, etc.)
+  // Mileage-specific fields
+  mileageDistance: decimal("mileage_distance", { precision: 8, scale: 2 }), // Miles driven
+  mileageRate: decimal("mileage_rate", { precision: 5, scale: 3 }), // Rate per mile (e.g., 0.655)
+  mileageStartLocation: text("mileage_start_location"),
+  mileageEndLocation: text("mileage_end_location"),
   emailId: text("email_id"), // Gmail message ID if submitted via email
   formSubmissionId: text("form_submission_id"), // Google Form submission ID
   sheetsRowNumber: integer("sheets_row_number"), // Row number in Google Sheets
@@ -58,9 +65,15 @@ export const insertExpenseSchema = createInsertSchema(expenses).omit({
   approvalDate: true,
   notificationSent: true,
 }).extend({
-  amount: z.string(),
+  amount: z.string().optional(), // Optional for mileage expenses
   expenseDate: z.string().transform((val) => new Date(val)),
   department: z.string().nullable().optional(),
+  receiptFileData: z.string().optional(),
+  receiptFileType: z.string().optional(),
+  mileageDistance: z.string().optional(),
+  mileageRate: z.string().optional(),
+  mileageStartLocation: z.string().optional(),
+  mileageEndLocation: z.string().optional(),
 });
 
 export const updateExpenseStatusSchema = z.object({

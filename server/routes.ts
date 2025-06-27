@@ -134,8 +134,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ message: "User not found" });
       }
       
+      // Handle mileage calculations
+      let calculatedAmount = req.body.amount;
+      if (req.body.mileageDistance && req.body.mileageRate) {
+        const distance = parseFloat(req.body.mileageDistance);
+        const rate = parseFloat(req.body.mileageRate);
+        calculatedAmount = (distance * rate).toFixed(2);
+      }
+      
       const expenseData = insertExpenseSchema.parse({
         ...req.body,
+        amount: calculatedAmount,
         employeeId: user.id,
         employeeName: user.name,
         employeeEmail: user.email,
