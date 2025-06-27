@@ -50,6 +50,31 @@ export const useAuth = create<AuthState>()(
         }
       },
 
+      register: async (email: string, name: string, department?: string) => {
+        try {
+          const response = await fetch('/api/auth/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, name, department }),
+          });
+
+          if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.message || 'Registration failed');
+          }
+
+          const data = await response.json();
+          set({
+            user: data.user,
+            token: data.token,
+            isAuthenticated: true,
+          });
+        } catch (error) {
+          console.error('Registration error:', error);
+          throw error;
+        }
+      },
+
       logout: () => {
         set({
           user: null,

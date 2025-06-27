@@ -7,6 +7,7 @@ import { useAuth } from "./lib/auth";
 import { useEffect } from "react";
 import Dashboard from "@/pages/dashboard";
 import Login from "@/pages/login";
+import Register from "@/pages/register";
 import NotFound from "@/pages/not-found";
 
 function AuthWrapper({ children }: { children: React.ReactNode }) {
@@ -32,6 +33,7 @@ function Router() {
         </AuthWrapper>
       )} />
       <Route path="/login" component={Login} />
+      <Route path="/register" component={Register} />
       <Route component={NotFound} />
     </Switch>
   );

@@ -7,10 +7,12 @@ import { useAuth } from "@/lib/auth";
 import { useToast } from "@/hooks/use-toast";
 import { Link } from "wouter";
 
-export default function Login() {
+export default function Register() {
   const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [department, setDepartment] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const { login } = useAuth();
+  const { register } = useAuth();
   const { toast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -18,15 +20,15 @@ export default function Login() {
     setIsLoading(true);
 
     try {
-      await login(email);
+      await register(email, name, department || undefined);
       toast({
         title: "Success",
-        description: "Logged in successfully",
+        description: "Account created successfully",
       });
     } catch (error) {
       toast({
         title: "Error",
-        description: "Login failed. Please check your email.",
+        description: error instanceof Error ? error.message : "Registration failed",
         variant: "destructive",
       });
     } finally {
@@ -39,10 +41,10 @@ export default function Login() {
       <Card className="w-full max-w-md mx-4">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl font-bold text-slate-900">
-            ExpenseFlow
+            Create Account
           </CardTitle>
           <p className="text-sm text-slate-600">
-            Sign in to your account
+            Join your team on ExpenseFlow
           </p>
         </CardHeader>
         <CardContent>
@@ -58,24 +60,45 @@ export default function Login() {
                 required
               />
             </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="name">Full Name</Label>
+              <Input
+                id="name"
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="John Doe"
+                required
+              />
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="department">Department (Optional)</Label>
+              <Input
+                id="department"
+                type="text"
+                value={department}
+                onChange={(e) => setDepartment(e.target.value)}
+                placeholder="Marketing, Engineering, etc."
+              />
+            </div>
+            
             <Button
               type="submit"
               className="w-full"
               disabled={isLoading}
             >
-              {isLoading ? "Signing in..." : "Sign In"}
+              {isLoading ? "Creating Account..." : "Create Account"}
             </Button>
           </form>
           
-          <div className="mt-6 text-center space-y-2">
+          <div className="mt-6 text-center">
             <p className="text-sm text-slate-600">
-              Don't have an account?{" "}
-              <Link href="/register" className="text-blue-600 hover:text-blue-500 font-medium">
-                Sign up
+              Already have an account?{" "}
+              <Link href="/login" className="text-blue-600 hover:text-blue-500 font-medium">
+                Sign in
               </Link>
-            </p>
-            <p className="text-xs text-slate-500">
-              Demo accounts: admin@agency.com, manager@agency.com, sarah@agency.com
             </p>
           </div>
         </CardContent>
