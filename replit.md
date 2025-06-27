@@ -134,6 +134,13 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
+June 27, 2025 - **Mileage & PDF Upload Features Added**
+- Implemented mileage rate calculation with Canadian standard rate ($0.68/mile)
+- Added PDF/image receipt upload with 5MB limit and Base64 storage
+- Created tabbed expense form interface (Regular vs Mileage expenses)
+- Real-time mileage calculation with location tracking
+- File validation and error handling for uploads
+
 June 25, 2025 - **Database Migration Completed Successfully**
 - PostgreSQL database fully operational with ExpenseFlow
 - All CRUD operations working through Drizzle ORM

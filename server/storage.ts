@@ -511,7 +511,7 @@ async function initializeDatabase() {
         { key: "gmail_enabled", value: "true" },
         { key: "sheets_enabled", value: "true" },
         { key: "notifications_enabled", value: "true" },
-        { key: "mileage_rate", value: "0.655" }, // IRS standard mileage rate for 2023
+        { key: "mileage_rate", value: "0.68" }, // Canadian standard mileage rate for 2023
       ]);
 
       // Add sample expenses

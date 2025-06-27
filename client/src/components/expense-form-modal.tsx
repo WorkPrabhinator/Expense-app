@@ -115,7 +115,7 @@ export function ExpenseFormModal({ isOpen, onClose }: ExpenseFormModalProps) {
   // Calculate mileage amount
   const calculateMileageAmount = () => {
     const distance = parseFloat(form.watch("mileageDistance") || "0");
-    const rate = (mileageRateData as any)?.rate || 0.655;
+    const rate = (mileageRateData as any)?.rate || 0.68;
     return distance * rate;
   };
 
@@ -143,7 +143,7 @@ export function ExpenseFormModal({ isOpen, onClose }: ExpenseFormModalProps) {
       if (activeTab === "mileage" && data.mileageDistance) {
         const calculatedAmount = calculateMileageAmount();
         submissionData.amount = calculatedAmount.toFixed(2);
-        submissionData.mileageRate = ((mileageRateData as any)?.rate || 0.655).toString();
+        submissionData.mileageRate = ((mileageRateData as any)?.rate || 0.68).toString();
       }
       
       const response = await fetch("/api/expenses", {
@@ -434,7 +434,7 @@ export function ExpenseFormModal({ isOpen, onClose }: ExpenseFormModalProps) {
                   <span className="font-medium">Mileage Calculation</span>
                 </div>
                 <div className="mt-2 space-y-1 text-sm">
-                  <div>Rate: ${((mileageRateData as any)?.rate || 0.655).toFixed(3)} per mile</div>
+                  <div>Rate: ${((mileageRateData as any)?.rate || 0.68).toFixed(3)} per mile (Canadian rate)</div>
                   <div>Distance: {form.watch("mileageDistance") || "0"} miles</div>
                   <div className="font-medium text-blue-700 dark:text-blue-300">
                     Calculated Amount: ${calculateMileageAmount().toFixed(2)}
