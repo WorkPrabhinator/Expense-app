@@ -14,6 +14,7 @@ interface AuthState {
   token: string | null;
   isAuthenticated: boolean;
   login: (email: string) => Promise<void>;
+  register: (email: string, name: string, department?: string) => Promise<void>;
   logout: () => void;
   checkAuth: () => Promise<void>;
 }

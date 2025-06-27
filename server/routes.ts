@@ -8,7 +8,7 @@ import { insertExpenseSchema, updateExpenseStatusSchema } from "@shared/schema";
 import { z } from "zod";
 
 // Simple session storage for demo purposes
-const sessions = new Map<string, { userId: number; email: string }>();
+const sessions = new Map<string, { userId: number; email: string; createdAt: Date }>();
 
 // Middleware to check authentication
 function requireAuth(req: any, res: any, next: any) {
@@ -35,7 +35,7 @@ async function handleLogin(req: any, res: any) {
     
     // Generate simple session token
     const sessionId = Math.random().toString(36).substring(2, 15);
-    sessions.set(sessionId, { userId: user.id, email: user.email });
+    sessions.set(sessionId, { userId: user.id, email: user.email, createdAt: new Date() });
     
     res.json({ 
       token: sessionId, 
@@ -53,9 +53,52 @@ async function handleLogin(req: any, res: any) {
   }
 }
 
+async function handleRegister(req: any, res: any) {
+  try {
+    const { email, name, department } = req.body;
+    
+    if (!email || !name) {
+      return res.status(400).json({ message: "Email and name are required" });
+    }
+    
+    // Check if user already exists
+    const existingUser = await storage.getUserByEmail(email);
+    if (existingUser) {
+      return res.status(409).json({ message: "User already exists with this email" });
+    }
+    
+    // Create new user (default role is 'employee')
+    const newUser = await storage.createUser({
+      email,
+      name,
+      role: 'employee',
+      department: department || null,
+    });
+    
+    // Create session
+    const sessionId = Math.random().toString(36).substring(2, 15);
+    sessions.set(sessionId, { userId: newUser.id, email: newUser.email, createdAt: new Date() });
+    
+    res.json({ 
+      token: sessionId, 
+      user: {
+        id: newUser.id,
+        email: newUser.email,
+        name: newUser.name,
+        role: newUser.role,
+        department: newUser.department,
+      }
+    });
+  } catch (error) {
+    console.error('Registration error:', error);
+    res.status(500).json({ message: "Registration failed" });
+  }
+}
+
 export async function registerRoutes(app: Express): Promise<Server> {
   // Authentication routes
   app.post("/api/auth/login", handleLogin);
+  app.post("/api/auth/register", handleRegister);
   
   app.get("/api/auth/me", requireAuth, async (req: any, res) => {
     try {
