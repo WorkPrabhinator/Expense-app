@@ -134,6 +134,13 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
+June 27, 2025 - **User Registration System Added**
+- Complete signup flow for team members at `/register`
+- Self-service account creation with email, name, and department fields
+- Automatic role assignment (new users get "employee" role)
+- Proper validation and duplicate email checking
+- Secure session creation and database storage
+
 June 27, 2025 - **Mileage & PDF Upload Features Added**
 - Implemented mileage rate calculation with Canadian standard rate ($0.68/mile)
 - Added PDF/image receipt upload with 5MB limit and Base64 storage
