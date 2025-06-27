@@ -32,8 +32,11 @@ const expenseFormSchema = insertExpenseSchema.omit({
   employeeEmail: true,
   department: true,
 }).extend({
-  amount: z.string().min(1, "Amount is required"),
+  amount: z.string().optional(),
   expenseDate: z.string().min(1, "Date is required"),
+  mileageDistance: z.string().optional(),
+  mileageStartLocation: z.string().optional(),
+  mileageEndLocation: z.string().optional(),
 });
 
 type ExpenseFormData = z.infer<typeof expenseFormSchema>;
@@ -45,8 +48,17 @@ interface ExpenseFormModalProps {
 
 export function ExpenseFormModal({ isOpen, onClose }: ExpenseFormModalProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [activeTab, setActiveTab] = useState("regular");
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
   const queryClient = useQueryClient();
+
+  // Fetch mileage rate
+  const { data: mileageRateData } = useQuery({
+    queryKey: ["/api/mileage-rate"],
+    enabled: isOpen && activeTab === "mileage",
+  });
 
   const form = useForm<ExpenseFormData>({
     resolver: zodResolver(expenseFormSchema),
@@ -57,6 +69,9 @@ export function ExpenseFormModal({ isOpen, onClose }: ExpenseFormModalProps) {
       expenseDate: new Date().toISOString().split('T')[0],
       receiptUrl: "",
       receiptFileName: "",
+      mileageDistance: "",
+      mileageStartLocation: "",
+      mileageEndLocation: "",
     },
   });
 

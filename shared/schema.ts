@@ -65,7 +65,7 @@ export const insertExpenseSchema = createInsertSchema(expenses).omit({
   approvalDate: true,
   notificationSent: true,
 }).extend({
-  amount: z.string().optional(), // Optional for mileage expenses
+  amount: z.string().min(1, "Amount is required"),
   expenseDate: z.string().transform((val) => new Date(val)),
   department: z.string().nullable().optional(),
   receiptFileData: z.string().optional(),

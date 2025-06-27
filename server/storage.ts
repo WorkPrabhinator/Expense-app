@@ -211,7 +211,7 @@ export class MemStorage implements IStorage {
       employeeName: insertExpense.employeeName,
       employeeEmail: insertExpense.employeeEmail,
       department: insertExpense.department || null,
-      amount: insertExpense.amount.toString(),
+      amount: insertExpense.amount?.toString() || "0.00",
       description: insertExpense.description,
       category: insertExpense.category,
       expenseDate: insertExpense.expenseDate,
@@ -223,6 +223,12 @@ export class MemStorage implements IStorage {
       approvalNote: null,
       receiptUrl: insertExpense.receiptUrl || null,
       receiptFileName: insertExpense.receiptFileName || null,
+      receiptFileData: insertExpense.receiptFileData || null,
+      receiptFileType: insertExpense.receiptFileType || null,
+      mileageDistance: insertExpense.mileageDistance || null,
+      mileageRate: insertExpense.mileageRate || null,
+      mileageStartLocation: insertExpense.mileageStartLocation || null,
+      mileageEndLocation: insertExpense.mileageEndLocation || null,
       emailId: insertExpense.emailId || null,
       formSubmissionId: insertExpense.formSubmissionId || null,
       sheetsRowNumber: insertExpense.sheetsRowNumber || null,
@@ -360,7 +366,29 @@ export class DatabaseStorage implements IStorage {
   async createExpense(insertExpense: InsertExpense): Promise<Expense> {
     const [expense] = await db
       .insert(expenses)
-      .values(insertExpense)
+      .values({
+        employeeId: insertExpense.employeeId,
+        employeeName: insertExpense.employeeName,
+        employeeEmail: insertExpense.employeeEmail,
+        department: insertExpense.department || null,
+        amount: insertExpense.amount,
+        description: insertExpense.description,
+        category: insertExpense.category,
+        expenseDate: insertExpense.expenseDate,
+        status: "pending",
+        receiptUrl: insertExpense.receiptUrl || null,
+        receiptFileName: insertExpense.receiptFileName || null,
+        receiptFileData: insertExpense.receiptFileData || null,
+        receiptFileType: insertExpense.receiptFileType || null,
+        mileageDistance: insertExpense.mileageDistance ? insertExpense.mileageDistance : null,
+        mileageRate: insertExpense.mileageRate ? insertExpense.mileageRate : null,
+        mileageStartLocation: insertExpense.mileageStartLocation || null,
+        mileageEndLocation: insertExpense.mileageEndLocation || null,
+        emailId: insertExpense.emailId || null,
+        formSubmissionId: insertExpense.formSubmissionId || null,
+        sheetsRowNumber: insertExpense.sheetsRowNumber || null,
+        notificationSent: false,
+      })
       .returning();
     return expense;
   }

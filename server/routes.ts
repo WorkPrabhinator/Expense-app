@@ -236,6 +236,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Mileage rate endpoint
+  app.get("/api/mileage-rate", requireAuth, async (req, res) => {
+    try {
+      const rateSetting = await storage.getSetting("mileage_rate");
+      const rate = rateSetting ? parseFloat(rateSetting.value) : 0.655; // Default IRS rate
+      res.json({ rate });
+    } catch (error) {
+      console.error('Get mileage rate error:', error);
+      res.status(500).json({ message: "Failed to get mileage rate" });
+    }
+  });
+
   // Background job endpoints (for testing)
   app.post("/api/admin/sync-emails", requireAuth, async (req: any, res) => {
     try {
