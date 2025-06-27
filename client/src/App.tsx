@@ -25,12 +25,16 @@ function AuthWrapper({ children }: { children: React.ReactNode }) {
 }
 
 function Router() {
+  const { isAuthenticated, checkAuth } = useAuth();
+
+  useEffect(() => {
+    checkAuth();
+  }, [checkAuth]);
+
   return (
     <Switch>
       <Route path="/" component={() => (
-        <AuthWrapper>
-          <Dashboard />
-        </AuthWrapper>
+        isAuthenticated ? <Dashboard /> : <Login />
       )} />
       <Route path="/login" component={Login} />
       <Route path="/register" component={Register} />
