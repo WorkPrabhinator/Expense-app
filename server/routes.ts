@@ -185,7 +185,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
         const rate = parseFloat(req.body.mileageRate);
         calculatedAmount = (distance * rate).toFixed(2);
       }
-      
+
+      let receiptUrl = req.body.receiptUrl || "";
+      if (req.body.receiptFileData && req.body.receiptFileType && req.body.receiptFileName) {
+        const buffer = Buffer.from(req.body.receiptFileData, 'base64');
+        receiptUrl = await driveService.uploadReceipt(
+          req.body.receiptFileName,
+          req.body.receiptFileType,
+          buffer
+      );
+      }
+
       const expenseData = insertExpenseSchema.parse({
         ...req.body,
         amount: calculatedAmount,
@@ -193,6 +203,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         employeeName: user.name,
         employeeEmail: user.email,
         department: user.department,
+        receiptUrl,
       });
       
       const expense = await storage.createExpense(expenseData);
