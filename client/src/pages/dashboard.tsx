@@ -1,5 +1,5 @@
 import { AppHeader } from "@/components/app-header";
-import { StatsOverview } from "@/components/stats-overview";
+import { StatsOverview } from "../components/stats-overview";
 import { ExpenseList } from "@/components/expense-list";
 import { ActionsSidebar } from "@/components/actions-sidebar";
 
