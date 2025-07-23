@@ -1,16 +1,3 @@
-import { supabase } from '../lib/supabaseClient';
-
-async function fetchExpenses() {
-  const { data, error } = await supabase
-    .from('expenses')
-    .select('*')
-    .order('created_at', { ascending: false });
-
-  return { data, error };
-}
-
-
-
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
