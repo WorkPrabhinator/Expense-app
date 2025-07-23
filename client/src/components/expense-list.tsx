@@ -1,3 +1,16 @@
+import { supabase } from '../lib/supabaseClient';
+
+async function fetchExpenses() {
+  const { data, error } = await supabase
+    .from('expenses')
+    .select('*')
+    .order('created_at', { ascending: false });
+
+  return { data, error };
+}
+
+
+
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
@@ -7,7 +20,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Check, X, Paperclip, Plus } from "lucide-react";
 import { ExpenseDetailModal } from "./expense-detail-modal";
-import { ExpenseFormModal } from "./expense-form-modal";
+import { ExpenseFormModal } from "./expense-form";
 import { getAuthHeader } from "@/lib/auth";
 import { useToast } from "@/hooks/use-toast";
 import type { ExpenseWithFormattedAmount } from "@shared/schema";

@@ -1,3 +1,43 @@
+import { supabase } from '../lib/supabaseClient';
+
+async function uploadReceipt(file: File) {
+  const fileExt = file.name.split('.').pop();
+  const fileName = `${Date.now()}.${fileExt}`;
+
+  const { data, error } = await supabase
+    .storage
+    .from('receipts')
+    .upload(fileName, file);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  const { publicUrl } = supabase.storage.from('receipts').getPublicUrl(fileName).data;
+  return publicUrl;
+}
+
+async function submitExpense(formData) {
+  const { error } = await supabase.from('expenses').insert([
+    {
+      user_id: user.id,
+      date: formData.date,
+      amount: formData.amount,
+      description: formData.description,
+      category: formData.category,
+      department: formData.department,
+      receipt_url: formData.receiptUrl,
+      status: 'pending',
+    }
+  ]);
+
+  if (error) {
+    console.error(error.message);
+  }
+}
+
+
+
 import { useState, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
